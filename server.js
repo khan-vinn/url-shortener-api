@@ -32,7 +32,13 @@ app.get("/api/shorturl/:id",(req,res)=>{
 
 app.post("/api/shorturl",(req,res)=>{
   const urlSent = req.body["url"]
-  var urlDns= (urlSent.split('//')[1]?.split("/")[0]) || "error-link"
+  var dd = urlSent.split('//')[1]
+  var urlDns
+  if(dd){
+    urlDns= (dd.split("/")[0])
+  } else{
+    urlDns= "error-link"
+  }
   dns.lookup(urlDns,(error)=>{
     if(!error){
       linkTotal.indexOf(urlSent)===-1 && linkTotal.push(urlSent)
@@ -42,7 +48,7 @@ app.post("/api/shorturl",(req,res)=>{
       })
     } else{
       res.json({
-        message:"Invalid URL"
+        error:"invalid url"
       })
     }
   })
